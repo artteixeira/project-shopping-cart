@@ -5,7 +5,7 @@ import computadorSearch from './mocks/search';
 const args = 'computador';
 const API_URL = 'https://api.mercadolibre.com/sites/MLB/search?q='
 
-describe('Teste a função fetchProduct', () => {
+describe('Teste a função fetchProductsList', () => {
   it('Testa se é uma função', () => {
     expect(typeof fetchProductsList).toEqual('function');
   });
