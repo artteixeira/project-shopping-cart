@@ -1,4 +1,5 @@
 import { removeCartID } from './cartFunctions';
+import { totalPrice } from './others';
 
 // Esses comentários que estão antes de cada uma das funções são chamados de JSdoc,
 // experimente passar o mouse sobre o nome das funções e verá que elas possuem descrições!
@@ -48,6 +49,7 @@ export const getIdFromProduct = (product) => (
 const removeCartProduct = (li, id) => {
   li.remove();
   removeCartID(id);
+  document.querySelector('.total-price').innerHTML = totalPrice();
 };
 
 /**
