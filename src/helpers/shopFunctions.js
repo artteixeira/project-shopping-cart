@@ -1,5 +1,6 @@
-import { removeCartID } from './cartFunctions';
-import { totalPrice } from './others';
+import { removeCartID, saveCartID, getSavedCartIDs } from './cartFunctions';
+import { getTotalPrice, totalPrice, addMsg } from './others';
+import { fetchProductsList, fetchProduct } from './fetchFunctions';
 
 // Esses comentários que estão antes de cada uma das funções são chamados de JSdoc,
 // experimente passar o mouse sobre o nome das funções e verá que elas possuem descrições!
@@ -126,4 +127,40 @@ export const createProductElement = ({ id, title, thumbnail, price }) => {
   section.appendChild(cartButton);
 
   return section;
+};
+
+export const generateProducts = async () => {
+  try {
+    const productsList = await fetchProductsList('computador');
+    const products = document.querySelector('.products');
+    productsList
+      .forEach((element) => {
+        products.appendChild(createProductElement(element));
+      });
+  } catch {
+    addMsg('p', 'error', 'Algum erro ocorreu, recarregue a página e tente novamente');
+  }
+};
+
+export const generateCart = async () => {
+  const cartProduct = document.querySelector('.cart__products');
+  const addCartBtn = document.querySelectorAll('.product__add');
+  addCartBtn.forEach((element) => element.addEventListener('click', async (event) => {
+    const productID = event.target.parentNode.firstChild.innerText;
+    const productInfo = await fetchProduct(productID);
+    cartProduct.appendChild(createCartProductElement(productInfo));
+    saveCartID(productID);
+    getTotalPrice();
+  }));
+};
+
+export const productsStorage = async () => {
+  const cartProduct = document.querySelector('.cart__products');
+  const storageIDs = getSavedCartIDs();
+  storageIDs.forEach(async (element) => {
+    cartProduct
+      .appendChild(createCartProductElement(await fetchProduct(element)));
+  });
+  const subtotal = document.querySelector('.total-price');
+  subtotal.innerHTML = localStorage.getItem('totalPrice');
 };
