@@ -157,9 +157,11 @@ export const generateCart = async () => {
 export const productsStorage = async () => {
   const cartProduct = document.querySelector('.cart__products');
   const storageIDs = getSavedCartIDs();
-  storageIDs.forEach(async (element) => {
+  const productInfos = storageIDs.map(async (element) => fetchProduct(element));
+  const promises = await Promise.all(productInfos);
+  promises.forEach(async (element) => {
     cartProduct
-      .appendChild(createCartProductElement(await fetchProduct(element)));
+      .appendChild(createCartProductElement(element));
   });
   const subtotal = document.querySelector('.total-price');
   subtotal.innerHTML = localStorage.getItem('totalPrice');

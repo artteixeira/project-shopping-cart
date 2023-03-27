@@ -13,7 +13,6 @@ export const totalPrice = () => {
   prices
     .forEach((element) => {
       total += Number(element.innerHTML);
-      // console.log(element.innerHTML);
     });
   localStorage.setItem('totalPrice', total);
   return total.toFixed(2);
